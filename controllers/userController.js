@@ -88,8 +88,10 @@ const profile = async (req, res) => {
 const updateProfile = async (req, res) => {
   try {
     const id = req.params.id;
-    const updatedUser = await userModel.findByIdAndUpdate(id, req.body);
-    res.status(200).json({ message: "profile updated successfully", updatedUser });
+    const { firstName, lastName, email } = req.body;
+    const userObj = { firstName, lastName, email };
+    const result = await userModel.findByIdAndUpdate(id, userObj);
+    res.status(200).json({ message: "profile updated successfully", result });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "something went wrong" });

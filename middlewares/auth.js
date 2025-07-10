@@ -1,6 +1,6 @@
-import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
 dotenv.config();
+import jwt from 'jsonwebtoken'
 
 const authenticate = (req, res, next) => {
   try {
@@ -10,6 +10,7 @@ const authenticate = (req, res, next) => {
     req.role = user.role;
     next();
   } catch (error) {
+    console.log(error)
     res.json({ message: "access denied" })
   }
 }
