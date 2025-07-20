@@ -5,10 +5,10 @@ const Router = express.Router();
 
 
 //admin routes
-Router.get("/", showProducts);
-Router.get("/all", displayProducts);
+Router.get("/", showProducts); // admin
+Router.get("/all", displayProducts); // users
 Router.post("/", addProduct);
-Router.get("/:id", getProduct);
+Router.get("/:id", getProduct); // users
 Router.patch("/:id", updateProduct);
 Router.delete("/:id", deleteProduct);
 
