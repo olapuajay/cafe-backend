@@ -21,6 +21,16 @@ export const getAllMenuItems = async (req, res) => {
   }
 };
 
+export const getFeaturedItems = async (req, res) => {
+  try {
+    const result = await menuModel.find({ featured: true }).limit(3).sort({ createdAt: -1 });
+    res.status(200).json({ message: "Featured items fetched successfully!", result });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong!" });
+  }
+};
+
 export const getMenuItem = async (req, res) => {
   try {
     const id = req.params.id;
