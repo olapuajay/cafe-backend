@@ -16,15 +16,16 @@ import {
 //user routes
 Router.post("/register", register);
 Router.post("/login", login);
-Router.get("/:id/profile", profile);
-Router.patch("/:id/profile", updateProfile);
+
+Router.get("/:id/profile", authenticate, authorize("user"), profile);
+Router.patch("/:id/profile", authenticate, authorize("user"), updateProfile);
 
 //admin routes
-Router.get("/", showUsers);
-Router.post("/", addUser);
-Router.get("/:id", getUser);
-Router.patch("/:id", updateUser);
-Router.delete("/:id", deleteUser);
+Router.get("/", authenticate, authorize("admin"), showUsers);
+Router.post("/", authenticate, authorize("admin"), addUser);
+Router.get("/:id", authenticate, authorize("admin"), getUser);
+Router.patch("/:id", authenticate, authorize("admin"), updateUser);
+Router.delete("/:id", authenticate, authorize("admin"), deleteUser);
 
 
 export default Router;

@@ -133,7 +133,7 @@ const showUsers = async (req, res) => {
     });
     const total = Math.ceil(count / limit);
     const users = await userModel
-      .find({ firstName: { $regex: search, $options: "i" } })
+      .find({ firstName: { $regex: search, $options: "i" }, role: { $ne: "admin" } })
       .skip(skip)
       .limit(limit)
       .sort({ updatedAt: -1 });

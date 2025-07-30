@@ -7,9 +7,9 @@ import {
 } from "../controllers/orderController.js";
 const Router = express.Router();
 
-Router.post("/", newOrder);
 Router.get("/", authenticate, authorize("admin"), showAllOrders);
-Router.patch("/:id", updateOrder);
-Router.get("/:id", showOrders);
+Router.patch("/:id", authenticate, authorize("admin"), updateOrder);
+Router.post("/", authenticate, authorize("user"), newOrder);
+Router.get("/:id", authenticate, authorize("user"), showOrders);
 
 export default Router;
