@@ -6,7 +6,7 @@ const userSchema = mongoose.Schema(
     lastName: { type: String },
     email: { type: String, unique: true },
     password: { type: String },
-    role: { type: String },
+    role: { type: String, default: "user" },
     status: { type: String },
   }, { timestamps: true }
 );

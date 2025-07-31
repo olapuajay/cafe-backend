@@ -84,6 +84,7 @@ const register = async (req, res) => {
       lastName,
       email,
       password: hashedpwd,
+      role: "user",
     };
     const result = await userModel.create(user);
     res.status(201).json(result);
