@@ -67,12 +67,8 @@ const showProducts = async (req, res) => {
 
 const displayProducts = async (req, res) => {
   try {
-    const { page = 1, limit = 6 } = req.query;
-    const skip = (page - 1) * limit;
-    const count = await productModel.countDocuments();
-    const total = Math.ceil(count/limit);
-    const products = await productModel.find().skip(skip).limit(limit);
-    res.status(200).json({products, total});
+    const products = await productModel.find();
+    res.status(200).json({products});
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Something went wrong" });
