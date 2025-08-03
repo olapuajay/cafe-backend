@@ -24,14 +24,36 @@ const showOrders = async (req, res) => {
 
 const showAllOrders = async (req, res) => {
   try {
-    const { status = "", page = 1, limit = 5 } = req.query;
-    const skip = (page - 1) * limit;
-    const count = await orderModel.countDocuments();
-    const total = Math.ceil(count / limit);
-    const result = await orderModel.find({ status: { $regex: status } });
-    res.status(200).json({ orders:result, total });
+    const { status = "" } = req.query;
+    const result = await orderModel.find({ status: { $regex: status, $options: "i" } });
+    res.status(200).json({ orders: result });
   } catch (err) {
     console.log(err);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+const cancelOrderByUser = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const { status } = req.body;
+    const order = await orderModel.findById(id);
+    if(!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+    
+    if(status === "cancelled") {
+      if(order.status !== "Pending") {
+        return res.status(400).json({ message: "Order cannot be cancelled" });
+      }
+    }
+
+    order.status = status;
+    await order.save();
+
+    res.status(200).json({ message: "Order updated successfully", order });
+  } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Something went wrong" });
   }
 };
@@ -51,4 +73,4 @@ const updateOrder = async (req, res) => {
   }
 };
 
-export { newOrder, showOrders, showAllOrders, updateOrder };
+export { newOrder, showOrders, showAllOrders, cancelOrderByUser, updateOrder };
