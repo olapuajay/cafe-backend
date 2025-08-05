@@ -45,6 +45,21 @@ const getProduct = async (req, res) => {
   }
 };
 
+const getProductByCategory = async (req, res) => {
+  try {
+    const { category } = req.query;
+    if(!category) {
+      return res.status(400).json({ message: "Category is required" });
+    }
+
+    const products = await productModel.find({ category }).sort({ updatedAt: -1 });
+    res.status(200).json(products);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+}
+
 const showProducts = async (req, res) => {
   try {
     const { page = 1, limit = 3, search = "" } = req.query;
@@ -75,4 +90,4 @@ const displayProducts = async (req, res) => {
   }
 };
 
-export { addProduct, deleteProduct, updateProduct, getProduct, showProducts,displayProducts };
+export { addProduct, deleteProduct, updateProduct, getProduct, getProductByCategory, showProducts, displayProducts };

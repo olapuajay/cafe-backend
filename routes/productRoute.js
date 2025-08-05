@@ -1,5 +1,5 @@
 import express from "express";
-import { addProduct,showProducts,deleteProduct,updateProduct,getProduct,displayProducts } from "../controllers/productController.js";
+import { addProduct,showProducts,deleteProduct,updateProduct,getProduct,getProductByCategory,displayProducts } from "../controllers/productController.js";
 import { authenticate, authorize } from "../middlewares/auth.js";
 
 const Router = express.Router();
@@ -12,6 +12,7 @@ Router.patch("/:id", authenticate, authorize("admin"), updateProduct);
 Router.delete("/:id", authenticate, authorize("admin"), deleteProduct);
 
 Router.get("/all", displayProducts); // users
+Router.get("/category", getProductByCategory); //users
 Router.get("/:id", getProduct); // users
 
 export default Router;
