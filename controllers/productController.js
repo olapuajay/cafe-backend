@@ -90,4 +90,45 @@ const displayProducts = async (req, res) => {
   }
 };
 
-export { addProduct, deleteProduct, updateProduct, getProduct, getProductByCategory, showProducts, displayProducts };
+const addReview = async (req, res) => {
+  try {
+    const { rating, comment } = req.body;
+    const product = await productModel.findById(req.params.id);
+
+    if(!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+
+    if (!rating || isNaN(rating) || rating < 1 || rating > 5) {
+      return res.status(400).json({ message: "Invalid rating value" });
+    }
+
+    const alreadyReviewed = product.reviews.find(
+      (r) => r.user.toString() === req.user.id
+    );
+    if(alreadyReviewed) {
+      alreadyReviewed.rating = Number(rating);
+      alreadyReviewed.comment = comment;
+    } else {
+      const review = {
+        user: req.user.id,
+        name: req.user.firstName,
+        rating: Number(rating),
+        comment,
+      }
+      product.reviews.push(review);
+    }
+
+    product.averageRating = product.reviews.length > 0
+      ? product.reviews.reduce((acc, r) => acc + r.rating, 0) / product.reviews.length
+      : 0;
+
+    await product.save();
+    res.status(201).json({ message: "Review added successfully", product });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Something went wrong" });
+  }
+};
+
+export { addProduct, deleteProduct, updateProduct, getProduct, getProductByCategory, showProducts, displayProducts, addReview };
